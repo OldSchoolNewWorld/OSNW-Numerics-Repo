@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>OSNW.Numerics</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>OSNW.Numerics</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>OSNW Numerics Feature Set</Title>
+    <Version>0.1.0</Version>
+    <Authors>Old School New World</Authors>
+    <Company>Old School New World</Company>
+    <Copyright>Copyright (c) 2025 OldSchoolNewWorld</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/OldSchoolNewWorld/OSNW-Numerics-Repo</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
