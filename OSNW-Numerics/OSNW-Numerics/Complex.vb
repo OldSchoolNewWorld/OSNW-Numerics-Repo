@@ -4,6 +4,7 @@ Option Compare Binary
 Option Infer Off
 
 Imports System.Runtime.CompilerServices
+Imports System.Numerics
 
 ' TODO:
 ' Look into these to implement standard forms A+Bi and A+iB for Complex, then R+Xj and R+jX for Impedance.
@@ -13,6 +14,194 @@ Imports System.Runtime.CompilerServices
 '   https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex
 '   REF: Format a complex number
 '   https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex#format-a-complex-number
+
+
+
+
+
+
+Public Class ComplexFormatter
+    Implements IFormatProvider, ICustomFormatter
+
+    '   REF: Format a complex number
+    ' https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex#format-a-complex-number
+
+    Public Function GetFormat(formatType As Type) As Object _
+        Implements IFormatProvider.GetFormat
+
+        If formatType Is GetType(ICustomFormatter) Then
+            Return Me
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Public Function Format(ByVal fmt As System.String,
+        ByVal arg As System.Object, ByVal provider As IFormatProvider) _
+        As System.String _
+        Implements ICustomFormatter.Format
+
+        If TypeOf arg Is System.Numerics.Complex Then
+            Dim c1 As System.Numerics.Complex =
+                DirectCast(arg, System.Numerics.Complex)
+
+            ' Check if the format string has a precision specifier.
+            Dim Precision As System.Int32
+            Dim FmtString As System.String = System.String.Empty
+            If fmt.Length > 1 Then
+                Try
+                    Precision = System.Int32.Parse(fmt.Substring(1))
+                Catch e As System.FormatException
+                    Precision = 0
+                End Try
+                FmtString = "N" + Precision.ToString()
+            End If
+            Dim Sign As System.Char = If(c1.Imaginary < 0.0, "-"c, "+"c)
+            If fmt.Substring(0, 1).Equals("I", System.StringComparison.OrdinalIgnoreCase) Then
+                Return c1.Real.ToString(FmtString) + " " + Sign + " " + Math.Abs(c1.Imaginary).ToString(FmtString) + "i"
+            ElseIf fmt.Substring(0, 1).Equals("J", System.StringComparison.OrdinalIgnoreCase) Then
+                Return c1.Real.ToString(FmtString) + " " + Sign + " " + Math.Abs(c1.Imaginary).ToString(FmtString) + "j"
+            Else
+                Return c1.ToString(fmt, provider)
+            End If
+        Else
+            If TypeOf arg Is System.IFormattable Then
+                Return DirectCast(arg, System.IFormattable).ToString(fmt, provider)
+            ElseIf arg IsNot Nothing Then
+                Return arg.ToString()
+            Else
+                Return String.Empty
+            End If
+        End If
+    End Function
+End Class ' ComplexFormatter
+
+
+
+
+Public Class ComplexFormatterABI
+    Implements IFormatProvider, ICustomFormatter
+
+    '   REF: Format a complex number
+    ' https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex#format-a-complex-number
+
+    Public Function GetFormat(formatType As Type) As Object _
+        Implements IFormatProvider.GetFormat
+
+        If formatType Is GetType(ICustomFormatter) Then
+            Return Me
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Public Function Format(ByVal fmt As System.String,
+        ByVal arg As System.Object, ByVal provider As IFormatProvider) _
+        As System.String _
+        Implements ICustomFormatter.Format
+
+        If TypeOf arg Is System.Numerics.Complex Then
+            Dim c1 As System.Numerics.Complex =
+                DirectCast(arg, System.Numerics.Complex)
+
+            ' Check if the format string has a precision specifier.
+            Dim Precision As System.Int32
+            Dim FmtString As System.String = System.String.Empty
+            If fmt.Length > 3 Then
+                Try
+                    Precision = System.Int32.Parse(fmt.Substring(3))
+                Catch e As System.FormatException
+                    Precision = 0
+                End Try
+                FmtString = "N" + Precision.ToString()
+            End If
+            Dim Sign As System.Char = If(c1.Imaginary < 0.0, "-"c, "+"c)
+            If fmt.Substring(0, 3).Equals("ABI", System.StringComparison.OrdinalIgnoreCase) Then
+                Return c1.Real.ToString(FmtString) + " " + Sign + " " + Math.Abs(c1.Imaginary).ToString(FmtString) + "i"
+            ElseIf fmt.Substring(0, 3).Equals("ABJ", System.StringComparison.OrdinalIgnoreCase) Then
+                Return c1.Real.ToString(FmtString) + " + " + Math.Abs(c1.Imaginary).ToString(FmtString) + "j"
+            Else
+                Return c1.ToString(fmt, provider)
+            End If
+        Else
+            If TypeOf arg Is System.IFormattable Then
+                Return DirectCast(arg, System.IFormattable).ToString(fmt, provider)
+            ElseIf arg IsNot Nothing Then
+                Return arg.ToString()
+            Else
+                Return String.Empty
+            End If
+        End If
+    End Function
+End Class ' ComplexFormatterABI
+
+
+
+
+
+
+
+Public Class ComplexFormatterAIB
+    Implements IFormatProvider, ICustomFormatter
+
+    '   REF: Format a complex number
+    ' https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex#format-a-complex-number
+
+    Public Function GetFormat(formatType As Type) As Object _
+        Implements IFormatProvider.GetFormat
+
+        If formatType Is GetType(ICustomFormatter) Then
+            Return Me
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Public Function Format(ByVal fmt As System.String,
+        ByVal arg As System.Object, ByVal provider As IFormatProvider) _
+        As System.String _
+        Implements ICustomFormatter.Format
+
+        If TypeOf arg Is System.Numerics.Complex Then
+            Dim c1 As System.Numerics.Complex =
+                DirectCast(arg, System.Numerics.Complex)
+
+            ' Check if the format string has a precision specifier.
+            Dim Precision As System.Int32
+            Dim FmtString As System.String = System.String.Empty
+            If fmt.Length > 3 Then
+                Try
+                    Precision = System.Int32.Parse(fmt.Substring(3))
+                Catch e As System.FormatException
+                    Precision = 0
+                End Try
+                FmtString = "N" + Precision.ToString()
+            End If
+            Dim Sign As System.Char = If(c1.Imaginary < 0.0, "-"c, "+"c)
+            If fmt.Substring(0, 3).Equals("AIB", System.StringComparison.OrdinalIgnoreCase) Then
+                Return c1.Real.ToString(FmtString) + " " + Sign + " i" + Math.Abs(c1.Imaginary).ToString(FmtString)
+            ElseIf fmt.Substring(0, 3).Equals("AJB", System.StringComparison.OrdinalIgnoreCase) Then
+                Return c1.Real.ToString(FmtString) + " + j" + Math.Abs(c1.Imaginary).ToString(FmtString)
+            Else
+                Return c1.ToString(fmt, provider)
+            End If
+        Else
+            If TypeOf arg Is System.IFormattable Then
+                Return DirectCast(arg, System.IFormattable).ToString(fmt, provider)
+            ElseIf arg IsNot Nothing Then
+                Return arg.ToString()
+            Else
+                Return String.Empty
+            End If
+        End If
+    End Function
+End Class ' ComplexFormatterAIB
+
+
+
+
+
+
 
 ''' <summary>
 ''' This module contains extension methods for the
