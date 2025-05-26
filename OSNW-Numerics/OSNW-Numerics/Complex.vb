@@ -8,7 +8,7 @@ Imports System.Runtime.CompilerServices
 ' TODO:
 ' Look into these to implement standard forms A+Bi and A+iB for Complex, then R+Xj and R+jX for Impedance.
 '   REF: Complex Struct
-'   https://learn.microsoft.com/en-us/dotnet/api/system.numerics.complex?view=net-9.0
+'   https://learn.microsoft.com/en-us/dotnet/api/system.numerics.complex?view=net-8.0
 '   REF: System.Numerics.Complex struct
 '   https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex
 '   REF: Format a complex number
