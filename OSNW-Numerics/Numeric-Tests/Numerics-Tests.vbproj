@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Numeric_Tests</RootNamespace>
+    <RootNamespace>NumericsTests</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
@@ -13,6 +13,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="OSNW.Numerics">
+      <HintPath>..\OSNW-Numerics\bin\Debug\net8.0\OSNW.Numerics.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
