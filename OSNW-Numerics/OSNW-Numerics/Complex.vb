@@ -6,15 +6,6 @@ Option Infer Off
 Imports System.Runtime.CompilerServices
 Imports System.Numerics
 
-' TODO:
-' Look into these to implement standard forms A+Bi and A+iB for Complex, then R+Xj and R+jX for Impedance.
-'   REF: Complex Struct
-'   https://learn.microsoft.com/en-us/dotnet/api/system.numerics.complex?view=net-8.0
-'   REF: System.Numerics.Complex struct
-'   https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex
-'   REF: Format a complex number
-'   https://learn.microsoft.com/en-us/dotnet/fundamentals/runtime-libraries/system-numerics-complex#format-a-complex-number
-
 Public Class ComplexStandardFormatter
     Implements IFormatProvider, ICustomFormatter
 
@@ -35,6 +26,26 @@ Public Class ComplexStandardFormatter
         End If
     End Function
 
+    ''' <summary>
+    ''' Implements the <see cref="ICustomFormatter.Format"/> method to format
+    ''' a <see cref="System.Numerics.Complex"/> number in one of several
+    ''' standard forms. The format string can be one of the following:
+    ''' <list type="bullet">
+    ''' <item><term>AIBC</term>
+    ''' <description>Closed form of A+iB.</description></item>
+    ''' <item><term>AIBO</term>
+    ''' <description>Open form of A + iB.</description></item>
+    ''' <item><term>ABIC</term>
+    ''' <description>Open form of A + Bi.</description></item>
+    ''' <item><term>ABIO</term>
+    ''' <description>Closed form of A+Bi.</description></item>
+    ''' </list>
+    ''' The format string can also include a precision specifier, e.g. "AIBC3".
+    ''' </summary>
+    ''' <param name="fmt">xxxxxxxxxxxxxxxxxxxxxx</param>
+    ''' <param name="arg">xxxxxxxxxxxxxxxxxxxxxx</param>
+    ''' <param name="provider">xxxxxxxxxxxxxxxxxxxxxx</param>
+    ''' <returns>xxxxxxxxxxxxxxxxxxxxxx</returns>
     Public Function Format(ByVal fmt As System.String,
                            ByVal arg As System.Object,
                            ByVal provider As IFormatProvider) _
@@ -48,9 +59,9 @@ Public Class ComplexStandardFormatter
             ' Check if the format string has a precision specifier.
             Dim Precision As System.Int32
             Dim FmtString As System.String = System.String.Empty
-            If fmt.Length > 3 Then
+            If fmt.Length > 4 Then
                 Try
-                    Precision = System.Int32.Parse(fmt.Substring(3))
+                    Precision = System.Int32.Parse(fmt.Substring(4))
                 Catch e As System.FormatException
                     Precision = 0
                 End Try
@@ -58,19 +69,32 @@ Public Class ComplexStandardFormatter
             End If
             Dim Sign As System.Char =
                 If(c1.Imaginary < 0.0, CHARMINUS, CHARPLUS)
-            If fmt.Substring(0, 3).Equals("AIB",
-                System.StringComparison.OrdinalIgnoreCase) Then
 
-                Return c1.Real.ToString(FmtString) + Sign + CHARI +
-                    Math.Abs(c1.Imaginary).ToString(FmtString)
-            ElseIf fmt.Substring(0, 3).Equals("ABI",
-                System.StringComparison.OrdinalIgnoreCase) Then
+            Select Case True
+                Case fmt.Substring(0, 4).Equals("AIBC",
+                    System.StringComparison.OrdinalIgnoreCase)
 
-                Return c1.Real.ToString(FmtString) + Sign +
-                    Math.Abs(c1.Imaginary).ToString(FmtString) + CHARI
-            Else
-                Return c1.ToString(fmt, provider)
-            End If
+                    Return c1.Real.ToString(FmtString) + $"{Sign}{CHARI}" +
+                        Math.Abs(c1.Imaginary).ToString(FmtString)
+                Case fmt.Substring(0, 4).Equals("AIBO",
+                    System.StringComparison.OrdinalIgnoreCase)
+
+                    Return c1.Real.ToString(FmtString) + $" {Sign} {CHARI}" +
+                        Math.Abs(c1.Imaginary).ToString(FmtString)
+                Case fmt.Substring(0, 4).Equals("ABIC",
+                    System.StringComparison.OrdinalIgnoreCase)
+
+                    Return c1.Real.ToString(FmtString) + Sign +
+                        Math.Abs(c1.Imaginary).ToString(FmtString) + CHARI
+                Case fmt.Substring(0, 4).Equals("ABIO",
+                    System.StringComparison.OrdinalIgnoreCase)
+
+                    Return c1.Real.ToString(FmtString) + $" {Sign} " +
+                        Math.Abs(c1.Imaginary).ToString(FmtString) + CHARI
+                Case Else
+                    Return c1.ToString(fmt, provider)
+            End Select
+
         Else
             If TypeOf arg Is System.IFormattable Then
                 Return DirectCast(

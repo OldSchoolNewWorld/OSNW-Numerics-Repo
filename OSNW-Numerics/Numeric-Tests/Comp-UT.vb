@@ -49,19 +49,19 @@ Namespace Complex
 
             Dim c1 As New System.Numerics.Complex(12.1, -15.4)
 
-            Dim S1 As String = $"Custom formatting with AIB0:        " +
-                $"{String.Format(New ComplexStandardFormatter(), "{0:AIB0}", c1)}"
-            Dim S2 As String = $"Custom formatting with AIB3:        " +
-                $"{String.Format(New ComplexStandardFormatter(), "{0:AIB3}", c1)}"
-            Dim S3 As String = $"Custom formatting with ABI0:        " +
-                $"{String.Format(New ComplexStandardFormatter(), "{0:ABI0}", c1)}"
-            Dim S4 As String = $"Custom formatting with ABI3:        " +
-                $"{String.Format(New ComplexStandardFormatter(), "{0:ABI3}", c1)}"
+            Dim S1 As String = $"Custom formatting with AIBO0:        " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:AIBO0}", c1)}"
+            Dim S2 As String = $"Custom formatting with AIBC3:        " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:AIBC3}", c1)}"
+            Dim S3 As String = $"Custom formatting with ABIC0:        " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:ABIC0}", c1)}"
+            Dim S4 As String = $"Custom formatting with ABIO3:        " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:ABIO3}", c1)}"
 
-            Dim Expect1 As String = "Custom formatting with AIB0:        12-i15"
-            Dim Expect2 As String = "Custom formatting with AIB3:        12.100-i15.400"
-            Dim Expect3 As String = "Custom formatting with ABI0:        12-15i"
-            Dim Expect4 As String = "Custom formatting with ABI3:        12.100-15.400i"
+            Dim Expect1 As String = "Custom formatting with AIBO0:        12 - i15"
+            Dim Expect2 As String = "Custom formatting with AIBC3:        12.100-i15.400"
+            Dim Expect3 As String = "Custom formatting with ABIC0:        12-15i"
+            Dim Expect4 As String = "Custom formatting with ABIO3:        12.100 - 15.400i"
 
             Assert.Equal(Expect1, S1)
             Assert.Equal(Expect2, S2)
