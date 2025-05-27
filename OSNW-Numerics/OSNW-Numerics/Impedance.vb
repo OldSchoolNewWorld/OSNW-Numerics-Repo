@@ -61,7 +61,7 @@ Public Structure Impedance
     ''' <returns>The string representation of the current instance in Cartesian
     ''' form.</returns>
     Public Overrides Function ToString() As System.String
-        Return Me.m_Complex.ToString
+        Return Me.m_Complex.ToString()
     End Function ' ToString
 
     ''' <summary>
@@ -81,7 +81,7 @@ Public Structure Impedance
     ''' <returns>The R+Xj standard form representation of the current
     ''' <c>Impedance</c>.</returns>
     Public Function ToStringRXj() As System.String
-        Return Me.m_Complex.ToStringABI.Replace(CHARI, CHARJ)
+        Return Me.m_Complex.ToStringABi.Replace(CHARI, CHARJ)
     End Function ' ToStringRXj
 
 #End Region ' "ToString"

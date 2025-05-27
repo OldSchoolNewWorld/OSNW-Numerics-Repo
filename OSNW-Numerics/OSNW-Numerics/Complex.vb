@@ -135,13 +135,13 @@ Public Module Complex
     ''' <returns>The A+iB standard form representation of the current
     ''' <c>Complex</c>.</returns>
     <Extension()>
-    Public Function ToStringAIB(ByVal aComplex As System.Numerics.Complex) _
+    Public Function ToStringAiB(ByVal aComplex As System.Numerics.Complex) _
         As System.String
 
         Dim Sign As System.String =
             If(aComplex.Imaginary < 0.0, CHARMINUS, CHARPLUS)
         Return $"{aComplex.Real}{Sign}{CHARI}{Math.Abs(aComplex.Imaginary)}"
-    End Function ' ToStringAIB
+    End Function ' ToStringAiB
 
     ''' <summary>
     ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
@@ -150,13 +150,13 @@ Public Module Complex
     ''' <returns>The A+Bi standard form representation of the current
     ''' <c>Complex</c>.</returns>
     <Extension()>
-    Public Function ToStringABI(ByVal aComplex As System.Numerics.Complex) _
+    Public Function ToStringABi(ByVal aComplex As System.Numerics.Complex) _
         As System.String
 
         Dim Sign As System.String =
             If(aComplex.Imaginary < 0.0, CHARMINUS, CHARPLUS)
         Return $"{aComplex.Real}{Sign}{Math.Abs(aComplex.Imaginary)}{CHARI}"
-    End Function ' ToStringABI
+    End Function ' ToStringABi
 
 #End Region ' "ToString"
 
