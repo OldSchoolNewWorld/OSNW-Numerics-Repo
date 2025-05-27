@@ -6,6 +6,13 @@ Option Infer Off
 Imports System.Runtime.CompilerServices
 Imports System.Numerics
 
+Public Enum StandardForm
+    AiBC ' A+iB Closed form, without spaces.
+    AiBO ' A + iB Open form, with spaces.
+    ABiC ' A+Bi Closed form, without spaces.
+    ABiO ' A + Bi Open form, with spaces.
+End Enum ' StandardForm
+
 Public Class ComplexStandardFormatter
     Implements IFormatProvider, ICustomFormatter
 
@@ -19,7 +26,7 @@ Public Class ComplexStandardFormatter
     Public Function GetFormat(formatType As Type) As Object _
         Implements IFormatProvider.GetFormat
 
-        If formatType Is GetType(ICustomFormatter) Then
+        If formatType Is GetType(System.ICustomFormatter) Then
             Return Me
         Else
             Return Nothing
@@ -27,78 +34,83 @@ Public Class ComplexStandardFormatter
     End Function
 
     ''' <summary>
-    ''' Implements the <see cref="ICustomFormatter.Format"/> method to format
-    ''' a <see cref="System.Numerics.Complex"/> number in one of several
+    ''' Implements the <see cref="System.ICustomFormatter.Format"/> method to
+    ''' format a <see cref="System.Numerics.Complex"/> number in one of several
     ''' standard forms. The format string can be one of the following:
     ''' <list type="bullet">
-    ''' <item><term>AIBC</term>
-    ''' <description>Closed form of A+iB.</description></item>
-    ''' <item><term>AIBO</term>
-    ''' <description>Open form of A + iB.</description></item>
-    ''' <item><term>ABIC</term>
-    ''' <description>Open form of A + Bi.</description></item>
-    ''' <item><term>ABIO</term>
-    ''' <description>Closed form of A+Bi.</description></item>
+    ''' <item><term>"AiBC"</term>"
+    ''' <description>Closed form A+iB.</description></item>
+    ''' <item><term>"AiBO"</term>"
+    ''' <description>Open form A + iB.</description></item>
+    ''' <item><term>"ABiC"</term>"
+    ''' <description>Open form A + Bi.</description></item>
+    ''' <item><term>"ABiO"</term>"
+    ''' <description>Closed form A+Bi.</description></item>
     ''' </list>
-    ''' The format string can also include a precision specifier, e.g. "AIBC3".
+    ''' The format string can also include a precision specifier, e.g. "AiBC3".
     ''' </summary>
-    ''' <param name="fmt">xxxxxxxxxxxxxxxxxxxxxx</param>
-    ''' <param name="arg">xxxxxxxxxxxxxxxxxxxxxx</param>
-    ''' <param name="provider">xxxxxxxxxxxxxxxxxxxxxx</param>
-    ''' <returns>xxxxxxxxxxxxxxxxxxxxxx</returns>
-    Public Function Format(ByVal fmt As System.String,
+    ''' <param name="standardFormat">Specifies the standard form ("AiBC",
+    ''' "AiBO", "ABiC", "ABiO") to be applied.</param>
+    ''' <param name="arg">An object to format.</param>
+    ''' <param name="formatProvider">An object that supplies format information
+    ''' about the current instance.</param>
+    ''' <returns>The string representation of the value of arg, formatted as
+    ''' specified by <paramref name="standardFormat"/> and
+    ''' <paramref name="formatProvider"/>.</returns>
+    Public Function Format(ByVal standardFormat As System.String,
                            ByVal arg As System.Object,
-                           ByVal provider As IFormatProvider) _
+                           ByVal formatProvider As IFormatProvider) _
         As System.String _
         Implements ICustomFormatter.Format
 
         If TypeOf arg Is System.Numerics.Complex Then
-            Dim c1 As System.Numerics.Complex =
+            Dim Cplx As System.Numerics.Complex =
                 DirectCast(arg, System.Numerics.Complex)
 
             ' Check if the format string has a precision specifier.
             Dim Precision As System.Int32
             Dim FmtString As System.String = System.String.Empty
-            If fmt.Length > 4 Then
+            If standardFormat.Length > 4 Then
                 Try
-                    Precision = System.Int32.Parse(fmt.Substring(4))
+                    Precision = System.Int32.Parse(standardFormat.Substring(4))
                 Catch e As System.FormatException
                     Precision = 0
                 End Try
                 FmtString = "N" + Precision.ToString()
             End If
+
+            ' Do these in advance for readability and consistency below.
+            Dim RStr As System.String = Cplx.Real.ToString(FmtString)
+            Dim IStr As System.String =
+                System.Math.Abs(Cplx.Imaginary).ToString(FmtString)
             Dim Sign As System.Char =
-                If(c1.Imaginary < 0.0, CHARMINUS, CHARPLUS)
+                If(Cplx.Imaginary < 0.0, CHARMINUS, CHARPLUS)
 
-            Select Case True
-                Case fmt.Substring(0, 4).Equals("AIBC",
-                    System.StringComparison.OrdinalIgnoreCase)
+            ' Apply the selected format.
+            If standardFormat.Substring(0, 4).Equals("AiBC",
+                System.StringComparison.OrdinalIgnoreCase) Then
 
-                    Return c1.Real.ToString(FmtString) + $"{Sign}{CHARI}" +
-                        Math.Abs(c1.Imaginary).ToString(FmtString)
-                Case fmt.Substring(0, 4).Equals("AIBO",
-                    System.StringComparison.OrdinalIgnoreCase)
+                Return $"{RStr}{Sign}{CHARI}{IStr}"
+            ElseIf standardFormat.Substring(0, 4).Equals("AiBO",
+                System.StringComparison.OrdinalIgnoreCase) Then
 
-                    Return c1.Real.ToString(FmtString) + $" {Sign} {CHARI}" +
-                        Math.Abs(c1.Imaginary).ToString(FmtString)
-                Case fmt.Substring(0, 4).Equals("ABIC",
-                    System.StringComparison.OrdinalIgnoreCase)
+                Return $"{RStr} {Sign} {CHARI}{IStr}"
+            ElseIf standardFormat.Substring(0, 4).Equals("ABiC",
+                System.StringComparison.OrdinalIgnoreCase) Then
 
-                    Return c1.Real.ToString(FmtString) + Sign +
-                        Math.Abs(c1.Imaginary).ToString(FmtString) + CHARI
-                Case fmt.Substring(0, 4).Equals("ABIO",
-                    System.StringComparison.OrdinalIgnoreCase)
+                Return $"{RStr}{Sign}{IStr}{CHARI}"
+            ElseIf standardFormat.Substring(0, 4).Equals("ABiO",
+                System.StringComparison.OrdinalIgnoreCase) Then
 
-                    Return c1.Real.ToString(FmtString) + $" {Sign} " +
-                        Math.Abs(c1.Imaginary).ToString(FmtString) + CHARI
-                Case Else
-                    Return c1.ToString(fmt, provider)
-            End Select
+                Return $"{RStr} {Sign} {IStr}{CHARI}"
+            Else
+                Return Cplx.ToString(standardFormat, formatProvider)
+            End If
 
         Else
             If TypeOf arg Is System.IFormattable Then
                 Return DirectCast(
-                    arg, System.IFormattable).ToString(fmt, provider)
+                    arg, System.IFormattable).ToString(standardFormat, formatProvider)
             ElseIf arg IsNot Nothing Then
                 Return arg.ToString()
             Else
@@ -116,7 +128,7 @@ End Class ' ComplexStandardFormatter
 ''' </summary>
 ''' <remarks>
 ''' The extension methods are used to convert a <c>Complex</c> to its equivalent
-''' string representation in the standard form of A + iB or A + Bi.
+''' string representation in several standard forms.
 ''' xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ''' </remarks>
 Public Module Complex
@@ -130,33 +142,79 @@ Public Module Complex
 
     ''' <summary>
     ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
-    ''' equivalent string representation in the standard form of A+iB.
+    ''' equivalent string representation in the closed standardFormat of A+iB.
     ''' </summary>
-    ''' <returns>The A+iB standard form representation of the current
-    ''' <c>Complex</c>.</returns>
+    ''' <returns>The closed A+iB standardFormat form representation of the
+    ''' current <c>Complex</c>.</returns>
+    ''' <remarks>
+    ''' The "Closed" versus "Open" nomenclature refers to the use of spaces
+    ''' around the sign for the imaginary component.
+    ''' </remarks>
     <Extension()>
-    Public Function ToStringAiB(ByVal aComplex As System.Numerics.Complex) _
+    Public Function ToStringAiBC(ByVal aComplex As System.Numerics.Complex) _
         As System.String
 
         Dim Sign As System.String =
             If(aComplex.Imaginary < 0.0, CHARMINUS, CHARPLUS)
         Return $"{aComplex.Real}{Sign}{CHARI}{Math.Abs(aComplex.Imaginary)}"
-    End Function ' ToStringAiB
+    End Function ' ToStringAiBC
 
     ''' <summary>
     ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
-    ''' equivalent string representation in the standard form of A+Bi.
+    ''' equivalent string representation in the open standardFormat of A + iB.
     ''' </summary>
-    ''' <returns>The A+Bi standard form representation of the current
-    ''' <c>Complex</c>.</returns>
+    ''' <returns>The open A + iB standardFormat form representation of the
+    ''' current <c>Complex</c>.</returns>
+    ''' <remarks>
+    ''' The "Closed" versus "Open" nomenclature refers to the use of spaces
+    ''' around the sign for the imaginary component.
+    ''' </remarks>
     <Extension()>
-    Public Function ToStringABi(ByVal aComplex As System.Numerics.Complex) _
+    Public Function ToStringAiBO(ByVal aComplex As System.Numerics.Complex) _
+        As System.String
+
+        Dim Sign As System.String =
+            If(aComplex.Imaginary < 0.0, CHARMINUS, CHARPLUS)
+        Return $"{aComplex.Real}{Sign}{CHARI}{Math.Abs(aComplex.Imaginary)}"
+    End Function ' ToStringAiBO
+
+    ''' <summary>
+    ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
+    ''' equivalent string representation in the closed standardFormat of A+Bi.
+    ''' </summary>
+    ''' <returns>The closed A+Bi standardFormat form representation of the
+    ''' current <c>Complex</c>.</returns>
+    ''' <remarks>
+    ''' The "Closed" versus "Open" nomenclature refers to the use of spaces
+    ''' around the sign for the imaginary component.
+    ''' </remarks>
+    <Extension()>
+    Public Function ToStringABiC(ByVal aComplex As System.Numerics.Complex) _
         As System.String
 
         Dim Sign As System.String =
             If(aComplex.Imaginary < 0.0, CHARMINUS, CHARPLUS)
         Return $"{aComplex.Real}{Sign}{Math.Abs(aComplex.Imaginary)}{CHARI}"
-    End Function ' ToStringABi
+    End Function ' ToStringABiC
+
+    ''' <summary>
+    ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
+    ''' equivalent string representation in the open standardFormat of A + Bi.
+    ''' </summary>
+    ''' <returns>The open A + Bi standardFormat form representation of the
+    ''' current <c>Complex</c>.</returns>
+    ''' <remarks>
+    ''' The "Closed" versus "Open" nomenclature refers to the use of spaces
+    ''' around the sign for the imaginary component.
+    ''' </remarks>
+    <Extension()>
+    Public Function ToStringABiO(ByVal aComplex As System.Numerics.Complex) _
+        As System.String
+
+        Dim Sign As System.String =
+            If(aComplex.Imaginary < 0.0, CHARMINUS, CHARPLUS)
+        Return $"{aComplex.Real}{Sign}{Math.Abs(aComplex.Imaginary)}{CHARI}"
+    End Function ' ToStringABiO
 
 #End Region ' "ToString"
 

@@ -75,6 +75,78 @@ Namespace Complex
 
         End Sub
 
+        <Fact>
+        Sub ToStringAiBC_StandardForm_WorksAsExpected()
+
+            Dim Cplx As New System.Numerics.Complex(12.1, -15.4)
+
+            Dim S1 As String = $"Format AiBC0: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:AiBC0}", Cplx)}"
+            Dim S2 As String = $"Format AiBC3: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:AiBC3}", Cplx)}"
+
+            Dim Expect1 As String = "Format AiBC0: 12-i15"
+            Dim Expect2 As String = "Format AiBC3: 12.100-i15.400"
+
+            Assert.Equal(Expect1, S1)
+            Assert.Equal(Expect2, S2)
+
+        End Sub
+
+        <Fact>
+        Sub ToStringAiBO_StandardForm_WorksAsExpected()
+
+            Dim Cplx As New System.Numerics.Complex(12.1, -15.4)
+
+            Dim S1 As String = $"Format AiBO0: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:AiBO0}", Cplx)}"
+            Dim S2 As String = $"Format AiBO3: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:AiBO3}", Cplx)}"
+
+            Dim Expect1 As String = "Format AiBO0: 12 - i15"
+            Dim Expect2 As String = "Format AiBO3: 12.100 - i15.400"
+
+            Assert.Equal(Expect1, S1)
+            Assert.Equal(Expect2, S2)
+
+        End Sub
+
+        <Fact>
+        Sub ToStringABiC_StandardForm_WorksAsExpected()
+
+            Dim Cplx As New System.Numerics.Complex(12.1, -15.4)
+
+            Dim S1 As String = $"Format ABiC0: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:ABiC0}", Cplx)}"
+            Dim S2 As String = $"Format ABiC3: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:ABiC3}", Cplx)}"
+
+            Dim Expect1 As String = "Format ABiC0: 12-15i"
+            Dim Expect2 As String = "Format ABiC3: 12.100-15.400i"
+
+            Assert.Equal(Expect1, S1)
+            Assert.Equal(Expect2, S2)
+
+        End Sub
+
+        <Fact>
+        Sub ToStringABiO_StandardForm_WorksAsExpected()
+
+            Dim Cplx As New System.Numerics.Complex(12.1, -15.4)
+
+            Dim S1 As String = $"Format ABiO0: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:ABiO0}", Cplx)}"
+            Dim S2 As String = $"Format ABiO3: " +
+                $"{String.Format(New ComplexStandardFormatter(), "{0:ABiO3}", Cplx)}"
+
+            Dim Expect1 As String = "Format ABiO0: 12 - 15i"
+            Dim Expect2 As String = "Format ABiO3: 12.100 - 15.400i"
+
+            Assert.Equal(Expect1, S1)
+            Assert.Equal(Expect2, S2)
+
+        End Sub
+
     End Class ' ToString
 
 End Namespace ' Complex

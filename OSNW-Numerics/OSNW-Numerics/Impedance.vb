@@ -54,6 +54,13 @@ Public Structure Impedance
 
 #Region "ToString"
 
+    Public Enum StandardForm
+        RjXC ' R+jX Closed form
+        RjXO ' R + jX Open form
+        RXjC ' R+Xj Closed form
+        RXjO ' R + Xj Open form
+    End Enum ' StandardForm
+
     ''' <summary>
     ''' Converts the value of the current complex number to its equivalent
     ''' string representation in Cartesian form.
@@ -71,7 +78,7 @@ Public Structure Impedance
     ''' <returns>The R+jX standard form representation of the current
     ''' <c>Impedance</c>.</returns>
     Public Function ToStringRjX() As System.String
-        Return Me.m_Complex.ToStringAIB.Replace(CHARI, CHARJ)
+        Return Me.m_Complex.ToStringAiBC.Replace(CHARI, CHARJ)
     End Function ' ToStringRjX
 
     ''' <summary>
@@ -81,7 +88,7 @@ Public Structure Impedance
     ''' <returns>The R+Xj standard form representation of the current
     ''' <c>Impedance</c>.</returns>
     Public Function ToStringRXj() As System.String
-        Return Me.m_Complex.ToStringABi.Replace(CHARI, CHARJ)
+        Return Me.m_Complex.ToStringABiC.Replace(CHARI, CHARJ)
     End Function ' ToStringRXj
 
 #End Region ' "ToString"
