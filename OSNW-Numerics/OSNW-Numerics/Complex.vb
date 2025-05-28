@@ -5,6 +5,7 @@ Option Infer Off
 
 Imports System.Runtime.CompilerServices
 Imports System.Numerics
+Imports System.Text
 
 Public Enum StandardForm
     AiBC ' A+iB Closed form, without spaces.
@@ -12,6 +13,16 @@ Public Enum StandardForm
     ABiC ' A+Bi Closed form, without spaces.
     ABiO ' A + Bi Open form, with spaces.
 End Enum ' StandardForm
+
+Public Enum StandardFormOrder
+    AiB ' A+iB order.
+    ABi ' A+Bi order.
+End Enum ' StandardFormOrder
+
+Public Enum StandardFormSpacing
+    Closed ' A+iB order.
+    Open ' A+Bi order.
+End Enum ' StandardFormSpacing
 
 Public Class ComplexStandardFormatter
     Implements IFormatProvider, ICustomFormatter
@@ -118,6 +129,89 @@ Public Class ComplexStandardFormatter
             End If
         End If
     End Function
+
+    ''' <summary>
+    ''' Returns a standard form string for a
+    ''' <see cref="System.Numerics.Complex"/> number in the specified
+    ''' <paramref name="order"/>, with the specified <paramref name="spacing"/>.
+    ''' The format string is constructed as follows:
+    ''' <list type="bullet">
+    ''' <item><term>Order</term>
+    ''' <description>StandardFormOrder.AiB or StandardFormOrder.ABi.
+    ''' </description></item>
+    ''' <item><term>Spacing</term>
+    ''' <description>StandardFormSpacing.Closed or StandardFormSpacing.Open.
+    ''' </description></item>
+    ''' </list>
+    ''' </summary>
+    ''' <param name="order">Specifies whether to export A+iB or A_Bi
+    ''' order.</param>
+    ''' <param name="spacing">Specifies whether to export closed A+iB or open
+    ''' A + iB spacing.</param>
+    ''' <returns>A standard format string for a <c>System.Numerics.Complex</c>,
+    ''' using the specified <c>order</c> and <c>spacing</c>.</returns>
+    Public Shared Function GetStandardFormat(ByVal order As StandardFormOrder,
+        ByVal spacing As StandardFormSpacing) As System.String
+
+        Dim Sb As New StringBuilder(4)
+        Select Case order
+            Case StandardFormOrder.AiB
+                Sb.Append("AiB")
+            Case StandardFormOrder.ABi
+                Sb.Append("ABi")
+            Case Else
+                Throw New ArgumentOutOfRangeException(NameOf(order), order,
+                    "Invalid StandardFormOrder specified.")
+        End Select
+        Select Case spacing
+            Case StandardFormSpacing.Closed
+                Sb.Append("C"c)
+            Case StandardFormSpacing.Open
+                Sb.Append("O"c)
+            Case Else
+                Throw New ArgumentOutOfRangeException(NameOf(spacing),
+                    spacing, "Invalid StandardFormOrder specified.")
+        End Select
+        Return Sb.ToString()
+    End Function ' GetStandardFormat
+
+    ''' <summary>
+    ''' Returns a standard form string for a
+    ''' <see cref="System.Numerics.Complex"/> number in the specified
+    ''' <paramref name="order"/>, with the specified <paramref name="spacing"/>
+    ''' and <paramref name="precision"/>. The format string is constructed as
+    ''' follows:
+    ''' <list type="bullet">
+    ''' <item><term>Order</term>
+    ''' <description>StandardFormOrder.AiB or StandardFormOrder.ABi.
+    ''' </description></item>
+    ''' <item><term>Spacing</term>
+    ''' <description>StandardFormSpacing.Closed or StandardFormSpacing.Open.
+    ''' </description></item>
+    ''' <item><term>Precision</term>
+    ''' <description>A System.UInt16 value representing the number of decimal
+    ''' places.
+    ''' </description></item>
+    ''' </list>
+    ''' </summary>
+    ''' <param name="order">Specifies whether to export A+iB or A_Bi
+    ''' order.</param>
+    ''' <param name="spacing">Specifies whether to export closed A+iB or open
+    ''' A + iB spacing.</param>
+    ''' <param name="precision">Specifies the number of decimal places to
+    ''' provide in the result.</param>
+    ''' <returns>A standard form string for a <c>System.Numerics.Complex</c>
+    ''' number in the specified <c>order</c>, with the specified <c>spacing</c>
+    ''' and <c>precision</c>.</returns>
+    Public Shared Function GetStandardFormat(ByVal order As StandardFormOrder,
+                                      ByVal spacing As StandardFormSpacing,
+                                      ByVal precision As System.UInt16) _
+                                      As System.String
+
+        Dim sb As New StringBuilder(GetStandardFormat(order, spacing))
+        sb.Append(precision)
+        Return sb.ToString()
+    End Function ' GetStandardFormat
 
 End Class ' ComplexStandardFormatter
 
