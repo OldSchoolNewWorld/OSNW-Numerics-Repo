@@ -225,7 +225,7 @@ End Class ' ComplexStandardFormatter
 ''' string representation in several standard forms.
 ''' xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ''' </remarks>
-Public Module Complex
+Public Module CompToStr
 
     Private Const CHARI As System.Char = "i"c
     Private Const CHARMINUS As System.Char = "-"c
