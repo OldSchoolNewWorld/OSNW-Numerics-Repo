@@ -8,7 +8,7 @@ Option Infer Off
 ''' where R and X are real numbers, and j is the imaginary unit, with the
 ''' property j^2 = -1.
 ''' </summary>
-Public Structure Impedance
+Public Structure ImpToStr
 
     ' DEV: An Impedance is essentially a complex number with some cosmetic
     ' differences:
@@ -72,7 +72,7 @@ Public Structure Impedance
     End Function ' ToString
 
     ''' <summary>
-    ''' Converts the value of a <see cref="OSNW.Numerics.Impedance"/> to its
+    ''' Converts the value of a <see cref="OSNW.Numerics.ImpToStr"/> to its
     ''' equivalent string representation in the standard form of R+jX.
     ''' </summary>
     ''' <returns>The R+jX standard form representation of the current
@@ -82,7 +82,7 @@ Public Structure Impedance
     End Function ' ToStringRjX
 
     ''' <summary>
-    ''' Converts the value of a <see cref="OSNW.Numerics.Impedance"/> to its
+    ''' Converts the value of a <see cref="OSNW.Numerics.ImpToStr"/> to its
     ''' equivalent string representation in the standard form of R+Xj.
     ''' </summary>
     ''' <returns>The R+Xj standard form representation of the current
@@ -96,7 +96,7 @@ Public Structure Impedance
 #Region "Constructors"
 
     ''' <summary>
-    ''' Initializes a new instance of the <see cref="OSNW.Numerics.Impedance"/>
+    ''' Initializes a new instance of the <see cref="OSNW.Numerics.ImpToStr"/>
     ''' structure with the specified resistance and reactance values.
     ''' </summary>
     ''' <param name="resistance"></param>

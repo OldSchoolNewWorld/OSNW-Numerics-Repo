@@ -7,22 +7,22 @@ Imports System.Runtime.CompilerServices
 Imports System.Numerics
 Imports System.Text
 
-Public Enum StandardForm
-    AiBC ' A+iB Closed form, without spaces.
-    AiBO ' A + iB Open form, with spaces.
-    ABiC ' A+Bi Closed form, without spaces.
-    ABiO ' A + Bi Open form, with spaces.
-End Enum ' StandardForm
-
 Public Enum StandardFormOrder
     AiB ' A+iB order.
     ABi ' A+Bi order.
 End Enum ' StandardFormOrder
 
 Public Enum StandardFormSpacing
-    Closed ' A+iB order.
-    Open ' A+Bi order.
+    Closed ' A+iB without spaces.
+    Open ' A + iB with spaces.
 End Enum ' StandardFormSpacing
+
+Public Enum StandardForm
+    AiBC ' A+iB Closed form.
+    AiBO ' A + iB Open form.
+    ABiC ' A+Bi Closed form.
+    ABiO ' A + Bi Open form.
+End Enum ' StandardForm
 
 Public Class ComplexStandardFormatter
     Implements IFormatProvider, ICustomFormatter
