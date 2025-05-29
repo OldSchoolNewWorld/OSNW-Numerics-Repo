@@ -7,23 +7,80 @@ Imports System.Runtime.CompilerServices
 Imports System.Numerics
 Imports System.Text
 
+''' <summary>
+''' Specifies the order in which to show the text representing the imaginary
+''' component in standard form output.
+''' </summary>
 Public Enum StandardFormOrder
-    AiB ' A+iB order.
-    ABi ' A+Bi order.
+
+    ''' <summary>
+    ''' Use A+iB order.
+    ''' </summary>
+    AiB
+
+    ''' <summary>
+    ''' Use A+Bi order.
+    ''' </summary>
+    ABi
+
 End Enum ' StandardFormOrder
 
+''' <summary>
+''' Specifies whether to show standard form output in open or closed format.
+''' </summary>
 Public Enum StandardFormSpacing
-    Closed ' A+iB without spaces.
-    Open ' A + iB with spaces.
+
+    ''' <summary>
+    '''  Use A+iB, without spaces.
+    ''' </summary>
+    Closed
+
+    ''' <summary>
+    '''  Use A + iB, with spaces.
+    ''' </summary>
+    Open
+
 End Enum ' StandardFormSpacing
 
+''' <summary>
+''' Specifies the order in which to show the text representing the imaginary
+''' component, and whether to show open or closed format, in standard form
+''' output.
+''' </summary>
 Public Enum StandardForm
-    AiBC ' A+iB Closed form.
-    AiBO ' A + iB Open form.
-    ABiC ' A+Bi Closed form.
-    ABiO ' A + Bi Open form.
+
+    ''' <summary>
+    ''' Use A+iB Closed form.
+    ''' </summary>
+    AiBC
+
+    ''' <summary>
+    ''' Use A + iB Open form.
+    ''' </summary>
+    AiBO
+
+    ''' <summary>
+    ''' Use A+Bi Closed form.
+    ''' </summary>
+    ABiC
+
+    ''' <summary>
+    ''' Use A + Bi Open form.
+    ''' </summary>
+    ABiO
+
 End Enum ' StandardForm
 
+''' <summary>
+''' Provides a custom formatter for complex numbers, allowing them to be
+''' formatted in standard forms such as A+iB or A+Bi, with options for open or
+''' closed spacing and precision.
+''' </summary>
+''' <remarks>
+''' This class implements the <see cref="System.IFormatProvider"/> and
+''' <see cref="System.ICustomFormatter"/> interfaces to provide custom
+''' formatting for complex numbers.
+''' </remarks>
 Public Class ComplexStandardFormatter
     Implements IFormatProvider, ICustomFormatter
 
@@ -128,7 +185,7 @@ Public Class ComplexStandardFormatter
                 Return String.Empty
             End If
         End If
-    End Function
+    End Function ' Format
 
     ''' <summary>
     ''' Returns a standard form string for a
@@ -148,8 +205,9 @@ Public Class ComplexStandardFormatter
     ''' order.</param>
     ''' <param name="spacing">Specifies whether to export closed A+iB or open
     ''' A + iB spacing.</param>
-    ''' <returns>A standard format string for a <c>System.Numerics.Complex</c>,
-    ''' using the specified <c>order</c> and <c>spacing</c>.</returns>
+    ''' <returns>A standard form format string for a
+    ''' <c>System.Numerics.Complex</c>, using the specified <c>order</c> and
+    ''' <c>spacing</c>.</returns>
     Public Shared Function GetStandardFormat(ByVal order As StandardFormOrder,
         ByVal spacing As StandardFormSpacing) As System.String
 
@@ -200,17 +258,14 @@ Public Class ComplexStandardFormatter
     ''' A + iB spacing.</param>
     ''' <param name="precision">Specifies the number of decimal places to
     ''' provide in the result.</param>
-    ''' <returns>A standard form string for a <c>System.Numerics.Complex</c>
-    ''' number in the specified <c>order</c>, with the specified <c>spacing</c>
-    ''' and <c>precision</c>.</returns>
+    ''' <returns>A standard form format string for a
+    ''' <c>System.Numerics.Complex</c> number in the specified <c>order</c>,
+    ''' with the specified <c>spacing</c> and <c>precision</c>.</returns>
     Public Shared Function GetStandardFormat(ByVal order As StandardFormOrder,
-                                      ByVal spacing As StandardFormSpacing,
-                                      ByVal precision As System.UInt16) _
-                                      As System.String
+        ByVal spacing As StandardFormSpacing,
+        ByVal precision As System.UInt16) As System.String
 
-        Dim sb As New StringBuilder(GetStandardFormat(order, spacing))
-        sb.Append(precision)
-        Return sb.ToString()
+        Return GetStandardFormat(order, spacing) + precision.ToString()
     End Function ' GetStandardFormat
 
 End Class ' ComplexStandardFormatter
@@ -219,10 +274,12 @@ End Class ' ComplexStandardFormatter
 ''' This module contains extension methods for the
 ''' <see cref="System.Numerics.Complex"/> structure.
 ''' xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+''' xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ''' </summary>
 ''' <remarks>
 ''' The extension methods are used to convert a <c>Complex</c> to its equivalent
 ''' string representation in several standard forms.
+''' xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ''' xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ''' </remarks>
 Public Module CompToStr
@@ -234,6 +291,7 @@ Public Module CompToStr
 
 #Region "ToString"
 
+    ' XXXXXXXXXX THIS DOES NOT USE THE INTERNAL FORMATTER. XXXXXXXXXX
     ''' <summary>
     ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
     ''' equivalent string representation in the closed standardFormat of A+iB.
@@ -253,6 +311,7 @@ Public Module CompToStr
         Return $"{aComplex.Real}{Sign}{CHARI}{Math.Abs(aComplex.Imaginary)}"
     End Function ' ToStringAiBC
 
+    ' XXXXXXXXXX THIS DOES NOT USE THE INTERNAL FORMATTER. XXXXXXXXXX
     ''' <summary>
     ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
     ''' equivalent string representation in the open standardFormat of A + iB.
@@ -272,6 +331,7 @@ Public Module CompToStr
         Return $"{aComplex.Real}{Sign}{CHARI}{Math.Abs(aComplex.Imaginary)}"
     End Function ' ToStringAiBO
 
+    ' XXXXXXXXXX THIS DOES NOT USE THE INTERNAL FORMATTER. XXXXXXXXXX
     ''' <summary>
     ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
     ''' equivalent string representation in the closed standardFormat of A+Bi.
@@ -291,6 +351,7 @@ Public Module CompToStr
         Return $"{aComplex.Real}{Sign}{Math.Abs(aComplex.Imaginary)}{CHARI}"
     End Function ' ToStringABiC
 
+    ' XXXXXXXXXX THIS DOES NOT USE THE INTERNAL FORMATTER. XXXXXXXXXX
     ''' <summary>
     ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
     ''' equivalent string representation in the open standardFormat of A + Bi.
@@ -309,6 +370,62 @@ Public Module CompToStr
             If(aComplex.Imaginary < 0.0, CHARMINUS, CHARPLUS)
         Return $"{aComplex.Real}{Sign}{Math.Abs(aComplex.Imaginary)}{CHARI}"
     End Function ' ToStringABiO
+
+    ' XXXXX RENAME "ORDER" AND ALL OF ITS APPEARANCES TO AVOID [ORDER] IN INTELISENSE. XXXXX
+    ' XXXXX CREATE A VERSION WITHOUT PRECISION THAT WILL USE THE DEFAULT "G" STYLE. XXXXX
+    ''' <summary>
+    ''' Converts the value of a <see cref="System.Numerics.Complex"/> to its
+    ''' equivalent string representation in standard form, using the specified
+    ''' <paramref name="order"/>, <paramref name="spacing"/>, and
+    ''' <paramref name="precision"/>.
+    ''' 
+    ''' The format string is constructed as follows:
+    ''' <list type="bullet">
+    ''' <item><term>Order</term>
+    ''' <description>StandardFormOrder.AiB or StandardFormOrder.ABi.
+    ''' </description></item>
+    ''' <item><term>Spacing</term>
+    ''' <description>StandardFormSpacing.Closed or StandardFormSpacing.Open.
+    ''' </description></item>
+    ''' </list>
+    ''' </summary>
+    ''' <param name="aComplex">xxxxxxxxxxxxxxxxxxxxxxxx</param>
+    ''' <param name="order">xxxxxxxxxxxxxxxxxxxxxxxx</param>
+    ''' <param name="spacing">xxxxxxxxxxxxxxxxxxxxxxxx</param>
+    ''' <param name="precision">xxxxxxxxxxxxxxxxxxxxxxxx</param>
+    ''' <returns>xxxxxxxxxxxxxxxxxxxxxxxx</returns>
+    <Extension>
+    Public Function ToStandardString(
+        ByVal aComplex As System.Numerics.Complex,
+        ByVal order As StandardFormOrder,
+        ByVal spacing As StandardFormSpacing,
+        ByVal precision As System.UInt16) As System.String
+
+        Dim Sb As New StringBuilder(4)
+        Select Case order
+            Case StandardFormOrder.AiB
+                Sb.Append("AiB")
+            Case StandardFormOrder.ABi
+                Sb.Append("ABi")
+            Case Else
+                Throw New ArgumentOutOfRangeException(NameOf(order), order,
+                    "Invalid StandardFormOrder specified.")
+        End Select
+        Select Case spacing
+            Case StandardFormSpacing.Closed
+                Sb.Append("C"c)
+            Case StandardFormSpacing.Open
+                Sb.Append("O"c)
+            Case Else
+                Throw New ArgumentOutOfRangeException(NameOf(spacing),
+                    spacing, "Invalid StandardFormOrder specified.")
+        End Select
+        Dim FmtStr As String = $"{{0:{Sb}{precision}}}"
+
+        Dim OutStr As String = $"{String.Format(New ComplexStandardFormatter(), FmtStr, aComplex)}"
+        Return OutStr
+
+    End Function ' ToStandardString
 
 #End Region ' "ToString"
 

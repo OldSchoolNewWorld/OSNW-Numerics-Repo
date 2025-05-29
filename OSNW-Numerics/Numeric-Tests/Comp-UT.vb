@@ -41,6 +41,8 @@ Namespace Complex
         <InlineData(-125.125, -50.5625, "<-125.125; -50.5625>")>
         <InlineData(Single.MaxValue, Single.MinValue, ' Encourage exponential notation.
                     "<3.4028234663852886E+38; -3.4028234663852886E+38>")>
+        <InlineData(4444.125, 123_456.562_5, "<4444.125; 123456.5625>")> ' Underscore.
+        <InlineData(5_555.125, 123_456.562_5, "<5555.125; 123456.5625>")> ' Underscore.
         Sub ToString_Generic_WorksAsExpected(
             ByVal real As Double, ByVal imaginary As Double, ByVal expected As String)
 
@@ -96,6 +98,8 @@ Namespace Complex
         <Theory>
         <InlineData(125.125, -50.5625, 0, "125-i51")>
         <InlineData(-125.125, 50.5625, 3, "-125.125+i50.562")>
+        <InlineData(4444.125, 123_456.562_5, 4, "4444.1250+i123456.5625")>
+        <InlineData(5_555.125, 123_456.562_5, 4, "5555.1250+i123456.5625")> ' Underscore.
         Sub ToStringAiBC_StandardForm_WorksAsExpected(ByVal real As Double, ByVal imaginary As Double,
                                                       ByVal precision As UInt16, ByVal expected As String)
 
@@ -129,6 +133,8 @@ Namespace Complex
         <Theory>
         <InlineData(125.125, -50.5625, 0, "125 - i51")>
         <InlineData(-125.125, 50.5625, 3, "-125.125 + i50.562")>
+        <InlineData(4444.125, 123_456.562_5, 4, "4444.1250 + i123456.5625")>
+        <InlineData(5_555.125, 123_456.562_5, 4, "5555.1250 + i123456.5625")> ' Underscore.
         Sub ToStringAiBO_StandardForm_WorksAsExpected(ByVal real As Double, ByVal imaginary As Double,
                                                       ByVal precision As UInt16, ByVal expected As String)
 
@@ -162,6 +168,8 @@ Namespace Complex
         <Theory>
         <InlineData(125.125, -50.5625, 0, "125-51i")>
         <InlineData(-125.125, 50.5625, 3, "-125.125+50.562i")>
+        <InlineData(4444.125, 123456.5625, 4, "4444.1250+123456.5625i")>
+        <InlineData(5_555.125, 123_456.562_5, 4, "5555.1250+123456.5625i")> ' Underscore.
         Sub ToStringABiC_StandardForm_WorksAsExpected(ByVal real As Double, ByVal imaginary As Double,
                                                       ByVal precision As UInt16, ByVal expected As String)
 
@@ -195,6 +203,8 @@ Namespace Complex
         <Theory>
         <InlineData(125.125, -50.5625, 0, "125 - 51i")>
         <InlineData(-125.125, 50.5625, 3, "-125.125 + 50.562i")>
+        <InlineData(4444.125, 123_456.562_5, 4, "4444.1250 + 123456.5625i")>
+        <InlineData(5_555.125, 123_456.562_5, 4, "5555.1250 + 123456.5625i")> ' Underscore.
         Sub ToStringABiO_StandardForm_WorksAsExpected(ByVal real As Double, ByVal imaginary As Double,
                                                       ByVal precision As UInt16, ByVal expected As String)
 
@@ -202,6 +212,37 @@ Namespace Complex
             Dim FmtStr As String = $"{{0:ABiO{precision}}}"
 
             Dim OutStr As String = $"{String.Format(New ComplexStandardFormatter(), FmtStr, Cplx)}"
+
+            Assert.Equal(expected, OutStr)
+
+        End Sub
+
+        <Theory>
+        <InlineData(125.125, 50.5625, OSNW.Numerics.StandardFormOrder.AiB,
+                    OSNW.Numerics.StandardFormSpacing.Closed, 3, "125.125+i50.562")> ' Base
+        <InlineData(-125.125, 50.5625, OSNW.Numerics.StandardFormOrder.AiB,
+                    OSNW.Numerics.StandardFormSpacing.Closed, 3, "-125.125+i50.562")> ' -R
+        <InlineData(125.125, -50.5625, OSNW.Numerics.StandardFormOrder.AiB,
+                    OSNW.Numerics.StandardFormSpacing.Closed, 3, "125.125-i50.562")> ' -I
+        <InlineData(125.125, 50.5625, OSNW.Numerics.StandardFormOrder.ABi,
+                    OSNW.Numerics.StandardFormSpacing.Closed, 3, "125.125+50.562i")> ' ABi
+        <InlineData(125.125, 50.5625, OSNW.Numerics.StandardFormOrder.AiB,
+                    OSNW.Numerics.StandardFormSpacing.Open, 3, "125.125 + i50.562")> ' Open
+        <InlineData(125.125, 50.5625, OSNW.Numerics.StandardFormOrder.AiB,
+                    OSNW.Numerics.StandardFormSpacing.Closed, 0, "125+i51")> ' Precision 0
+        <InlineData(4444.125, 123_456.562_5, OSNW.Numerics.StandardFormOrder.AiB,
+                    OSNW.Numerics.StandardFormSpacing.Closed, 4, "4444.1250+i123456.5625")> ' Underscore.
+        <InlineData(5_555.125, 123_456.562_5, OSNW.Numerics.StandardFormOrder.AiB,
+                    OSNW.Numerics.StandardFormSpacing.Closed, 4, "5555.1250+i123456.5625")> ' Underscore.
+        Sub ToStringStandard_Detailed_WorksAsExpected(
+            ByVal real As Double, ByVal imaginary As Double,
+            ByVal order As StandardFormOrder, ByVal spacing As StandardFormSpacing,
+            ByVal precision As System.UInt16, ByVal expected As String)
+
+            Dim Cplx As New System.Numerics.Complex(real, imaginary)
+            'Dim FmtStr As String = $"{{0:ABiO{precision}}}"
+
+            Dim OutStr As String = Cplx.ToStandardString(order, spacing, precision)
 
             Assert.Equal(expected, OutStr)
 
