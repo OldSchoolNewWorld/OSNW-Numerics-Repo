@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>OSNW</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>OSNW.Numerics</AssemblyName>
+    <Title>OSNW Numerics Features</Title>
+    <Version>0.1.0</Version>
+    <Authors>OldSchoolNewWorld</Authors>
+    <Company>OldSchoolNewWorld</Company>
+    <Description>Features related, or similar, to System.Numerics</Description>
+    <Copyright>Copyright (c) 2025 OldSchoolNewWorld</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/OldSchoolNewWorld/OSNW-Numerics-Repo</RepositoryUrl>
+    <PackageTags>Complex; Impedance; Standard form</PackageTags>
+    <PackageReleaseNotes>Version 0.1.0 is a development version.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
