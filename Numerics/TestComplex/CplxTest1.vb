@@ -2,7 +2,7 @@ Imports System
 Imports Xunit
 
 Namespace TestComplex
-    Public Class UnitTest1
+    Public Class CplxTest1
         <Fact>
         Sub TestSub()
 

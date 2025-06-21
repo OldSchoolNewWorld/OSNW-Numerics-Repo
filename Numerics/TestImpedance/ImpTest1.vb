@@ -2,7 +2,7 @@ Imports System
 Imports Xunit
 
 Namespace TestImpedance
-    Public Class UnitTest1
+    Public Class ImpTest1
         <Fact>
         Sub TestSub()
 
